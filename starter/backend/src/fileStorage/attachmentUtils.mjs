@@ -22,7 +22,7 @@ export async function generateImageUrl(todoId) {
   const imageId = uuidv4()
 
   const url = await getUploadUrl(imageId)
-
+  
   return url
 }
 

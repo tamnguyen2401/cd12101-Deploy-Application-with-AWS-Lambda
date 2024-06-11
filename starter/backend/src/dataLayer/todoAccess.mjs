@@ -18,13 +18,13 @@ export class TodosAccess {
     console.log('Getting todos of ' + userId)
 
     const result = await this.dynamoDbClient.query({
-        TableName: this.todosTable,
-        IndexName: this.createdAtIndex,
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: {
-          ':userId': userId
-        }
-      })
+      TableName: this.todosTable,
+      IndexName: this.createdAtIndex,
+      KeyConditionExpression: 'userId = :userId',
+      ExpressionAttributeValues: {
+        ':userId': userId
+      }
+    })
 
     return result.Items
   }
@@ -41,31 +41,50 @@ export class TodosAccess {
   }
 
   async deleteTodo(todo) {
-    console.log(`Deleting a todo with id ${todo.id}`)
+    console.log(`Deleting a todo with id ${todo.todoId}`)
 
     return await this.dynamoDbClient.delete({
-        TableName: this.todosTable,
-        Key: {
-            todoId: todo.id
-        },
+      TableName: this.todosTable,
+      Key: {
+        userId: todo.userId,
+        todoId: todo.todoId
+      },
     })
   }
 
   async updateTodo(todo) {
-    console.log(`Updating a todo with id ${todo.id}`)
+    console.log(`Updating a todo with id ${todo.todoId}`)
 
     return await this.dynamoDbClient.update({
-        TableName: this.todosTable,
-        Key: {
-          todoId: todo.id,
-        },
-        UpdateExpression: "set name = :name, dueDate = :dueDate, done = :done",
-        ExpressionAttributeValues: {
-            ":name": todo.name,
-            ":dueDate": todo.dueDate,
-            ":done": todo.done
-        },
-        ReturnValues: "ALL_NEW",
+      TableName: this.todosTable,
+      Key: {
+        userId: todo.userId,
+        todoId: todo.todoId
+      },
+      UpdateExpression: "set name = :name, dueDate = :dueDate, done = :done",
+      ExpressionAttributeValues: {
+        ":name": todo.name,
+        ":dueDate": todo.dueDate,
+        ":done": todo.done
+      },
+      ReturnValues: "",
+    });
+  }
+
+  async updateAttachmentUrl(todo) {
+    console.log(`Updating attachment Url with id ${todo.todoId}`)
+
+    return await this.dynamoDbClient.update({
+      TableName: this.todosTable,
+      Key: {
+        userId: todo.userId,
+        todoId: todo.todoId
+      },
+      UpdateExpression: "set attachmentUrl = :attachmentUrl",
+      ExpressionAttributeValues: {
+        ":attachmentUrl": todo.attachmentUrl
+      },
+      ReturnValues: "ALL_NEW",
     });
   }
 }

@@ -2,14 +2,13 @@ service: serverless-todo-app
 
 plugins:
   - serverless-iam-roles-per-function
-  - serverless-webpack
 
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
-  runtime: nodejs14.x
-  
+  runtime: nodejs20.x
+
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
 
@@ -40,7 +39,6 @@ provider:
           Resource:
             - "*"
 functions:
-
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
@@ -68,10 +66,10 @@ functions:
           method: post
           path: todos
           cors: true
+          authorizer: Auth
           request:
             schemas:
               application/json: ${file(models/create-todo-request.json)}
-          authorizer: Auth
     iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
@@ -88,6 +86,9 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
+          request:
+            schemas:
+              application/json: ${file(models/update-todo-request.json)}
     iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
@@ -144,24 +145,16 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: userID
+          - AttributeName: userId
             AttributeType: S
-          - AttributeName: todoID
+          - AttributeName: todoId
             AttributeType: S
           - AttributeName: createdAt
             AttributeType: S
-          - AttributeName: name
-            AttributeType: S
-          - AttributeName: dueDate
-            AttributeType: S
-          - AttributeName: done
-            AttributeType: BOOL
-          - AttributeName: attachmentUrl
-            AttributeType: S
         KeySchema:
-          - AttributeName: userID
+          - AttributeName: userId
             KeyType: HASH
-          - AttributeName: todoID
+          - AttributeName: todoId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TODOS_TABLE}
@@ -184,11 +177,10 @@ resources:
           RestrictPublicBuckets: false
         CorsConfiguration:
           CorsRules:
-            -
-              AllowedOrigins:
-                - '*'
+            - AllowedOrigins:
+                - "*"
               AllowedHeaders:
-                - '*'
+                - "*"
               AllowedMethods:
                 - GET
                 - PUT
@@ -206,7 +198,7 @@ resources:
           Statement:
             - Sid: PublicReadForGetBucketObjects
               Effect: Allow
-              Principal: '*'
-              Action: 's3:GetObject'
-              Resource: 'arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*'
+              Principal: "*"
+              Action: "s3:GetObject"
+              Resource: "arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*"
         Bucket: !Ref AttachmentsBucket

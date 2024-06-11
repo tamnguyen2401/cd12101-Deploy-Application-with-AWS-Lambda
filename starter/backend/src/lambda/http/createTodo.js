@@ -24,7 +24,7 @@ export const handler = middy()
       statusCode: 201,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
+        'Access-Control-Allow-Credencials': true
       },
       body: JSON.stringify({
         newItem

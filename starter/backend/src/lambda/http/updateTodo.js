@@ -19,13 +19,13 @@ export const handler = middy()
     const authorization = event.headers.Authorization
     const userId = getUserId(authorization)
 
-    const result = await updateTodo(updatedTodo, todoId)
+    const result = await updateTodo(updatedTodo, todoId, userId)
 
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
+        'Access-Control-Allow-Credencials': true
       },
       body: JSON.stringify({
         result
