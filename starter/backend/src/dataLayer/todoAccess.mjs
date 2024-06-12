@@ -61,13 +61,18 @@ export class TodosAccess {
         userId: todo.userId,
         todoId: todo.todoId
       },
-      UpdateExpression: "set name = :name, dueDate = :dueDate, done = :done",
+      ExpressionAttributeNames: {
+        "#name":"name",
+        "#dueDate":"dueDate",
+        "#done":"done",
+        },
+      UpdateExpression: "set #name = :name, #dueDate = :dueDate, #done = :done",
       ExpressionAttributeValues: {
         ":name": todo.name,
         ":dueDate": todo.dueDate,
         ":done": todo.done
       },
-      ReturnValues: "",
+      ReturnValues: "ALL_NEW",
     });
   }
 
@@ -80,7 +85,10 @@ export class TodosAccess {
         userId: todo.userId,
         todoId: todo.todoId
       },
-      UpdateExpression: "set attachmentUrl = :attachmentUrl",
+      ExpressionAttributeNames: {
+        "#attachmentUrl":"attachmentUrl"
+        },
+      UpdateExpression: "set #attachmentUrl = :attachmentUrl",
       ExpressionAttributeValues: {
         ":attachmentUrl": todo.attachmentUrl
       },

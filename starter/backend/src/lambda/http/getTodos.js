@@ -14,19 +14,18 @@ export const handler = middy()
   .handler(async (event) => {
     console.log('Processing event: ', event)
 
-    const authorization = event.headers.Authorization
-    const userId = getUserId(authorization)
+    const userId = getUserId(event)
 
-    const items = await getTodosByUserId(userId)
+    const todos = await getTodosByUserId(userId)
 
-    if (items.Count !== 0) {
+    if (todos.Count !== 0) {
       return {
         statusCode: 200,
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credencials': true
         },
-        body: JSON.stringify(result.Items[0])
+        body: JSON.stringify({items: todos})
       }
     }
 

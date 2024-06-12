@@ -17,8 +17,9 @@ root.render(
     clientId={clientId}
     redirectUri={window.location.origin}
     audience={`https://${domain}/api/v2/`}
-    useRefreshTokens="true"
-    scope="offline_access read:todo write:todo delete:todo"
+    useRefreshTokens={true}
+    cacheLocation={'localstorage'}
+    scope="offline_access read:todos write:todo delete:todo"
   >
     <App />
   </Auth0Provider>,

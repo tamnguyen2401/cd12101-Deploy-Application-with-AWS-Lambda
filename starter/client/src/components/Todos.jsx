@@ -130,10 +130,6 @@ export function Todos() {
     async function foo() {
       try {
         const accessToken = await getAccessTokenSilently({
-          // authorizationParams: {
-          //   audience: `https://${domain}/api/v2/`,
-          //   scope: "read:todos",
-          // },
           audience: `https://${domain}/api/v2/`,
           scope: 'read:todos'
         })

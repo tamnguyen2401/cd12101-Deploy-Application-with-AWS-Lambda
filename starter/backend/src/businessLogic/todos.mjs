@@ -15,7 +15,10 @@ export async function createTodo(createTodoRequest, userId) {
     userId: userId,
     todoId: todoId,
     createdAt: timestamp,
-    ...createTodoRequest
+    name: createTodoRequest.name,
+    dueDate: createTodoRequest.dueDate,
+    done: false,
+    attachmentUrl: ''
   })
 }
 
@@ -23,7 +26,9 @@ export async function updateTodo(updateTodoRequest, todoId, userId) {
   return await todosAccess.updateTodo({
     userId: userId,
     todoId: todoId,
-    ...updateTodoRequest
+    name: updateTodoRequest.name,
+    dueDate: updateTodoRequest.dueDate,
+    done: updateTodoRequest.done
   })
 }
 
@@ -34,11 +39,11 @@ export async function deleteTodo(todoId, userId) {
   })
 }
 
-export async function updateAttachmentUrl(url, todoId, userId) {
+export async function updateAttachmentUrl(todoId, userId, attachmentUrl) {
   return await todosAccess.updateAttachmentUrl({
     userId: userId,
     todoId: todoId,
-    attachmentUrl: url
+    attachmentUrl: attachmentUrl
   })
 }
 
