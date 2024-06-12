@@ -14,9 +14,7 @@ export async function generateImageUrl(todoId, userId) {
 
   const attachmentUrl = `https://${bucketName}.s3.amazonaws.com/${imageId}`
 
-  const result = await updateAttachmentUrl(todoId, userId, attachmentUrl)
-
-  console.log('result: ', result)
+  await updateAttachmentUrl(todoId, userId, attachmentUrl)
   
   return await getUploadUrl(imageId)
 }

@@ -3,6 +3,7 @@ import cors from '@middy/http-cors'
 import httpErrorHandler from '@middy/http-error-handler'
 import { generateImageUrl } from '../../fileStorage/attachmentUtils.mjs'
 import { getUserId } from '../utils.mjs'
+import { updateAttachmentUrl } from '../../businessLogic/todos.mjs'
 
 export const handler = middy()
   .use(httpErrorHandler())
@@ -18,7 +19,8 @@ export const handler = middy()
     // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
     const userId = getUserId(event)
 
-    const url = generateImageUrl(todoId, userId)
+    const url = await generateImageUrl(todoId, userId)
+
     console.log('Caller event', url)
     return {
       statusCode: 201,
